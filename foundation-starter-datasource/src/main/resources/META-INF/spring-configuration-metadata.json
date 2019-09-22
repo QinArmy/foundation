@@ -1,0 +1,15 @@
+{
+  "properties": [
+    {
+      "defaultValue": 10,
+      "name": "spring.datasource.core.timeout.boundary",
+      "description": "核心数据超时从库等的边界,事务超时走过边界则选择超时从库",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "spring.datasource.core.primary.url",
+      "description": "core 主库url",
+      "type": "java.lang.String"
+    }
+  ]
+}

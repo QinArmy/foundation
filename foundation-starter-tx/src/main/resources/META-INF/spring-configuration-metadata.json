@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "defaultValue": true,
+      "name": "tasty.tx.transactionDefinitionInterceptor.enable",
+      "description": "事务增强是否可用",
+      "type": "java.lang.Boolean"
+    }
+  ]
+}

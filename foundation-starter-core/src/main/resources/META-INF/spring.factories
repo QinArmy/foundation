@@ -1,0 +1,6 @@
+org.springframework.boot.env.EnvironmentPostProcessor=org.qinarmy.foundation.env.CoreEnvironmentPostProcessor
+org.qinarmy.foundation.listener.ApplicationFailListener=\
+org.qinarmy.foundation.listener.EnvironmentChangePublisher,\
+org.qinarmy.foundation.listener.ApplicationFailListener,\
+org.springframework.boot.context.ApplicationPidFileWriter,\
+org.springframework.boot.web.context.WebServerPortFileWriter

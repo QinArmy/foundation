@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.3.RELEASE</version>
+        <version>2.1.8.RELEASE</version>
     </parent>
 
     <groupId>org.qinarmy.foundation</groupId>
@@ -15,18 +15,30 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>core</module>
-        <module>template</module>
-        <module>struct</module>
-        <module>email</module>
-        <module>email-api</module>
-        <module>template-api</module>
+        <module>foundation-starter-core</module>
+        <module>foundation-template</module>
+        <module>foundation-struct</module>
+        <module>foundation-email</module>
+        <module>foundation-email-api</module>
+        <module>foundation-template-api</module>
+        <module>foundation-concurrent</module>
+        <module>foundation-starter-readonly-datasource</module>
+        <module>foundation-starter-datasource</module>
+        <module>foundation-starter-timer</module>
+        <module>foundation-starter-web</module>
+        <module>foundation-starter-tx</module>
+        <module>foundation-starter-timer</module>
+        <module>foundation-starter-jpa</module>
+        <module>foundation-starter-snowflake-client</module>
+        <module>foundation-starter-snowflake-server</module>
+        <module>foundation-starter-sleuth</module>
     </modules>
 
     <properties>
 
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <foundation.version>1.0-SNAPSHOT</foundation.version>
 
         <army.version>1.0-SNAPSHOT</army.version>
 
@@ -37,12 +49,17 @@
         <pdfbox.version>2.0.11</pdfbox.version>
         <org.xhtmlrenderer>9.0.3</org.xhtmlrenderer>
 
+        <alibaba.druid.version>1.1.20</alibaba.druid.version>
+        <ctrip.apollo.version>1.4.0</ctrip.apollo.version>
         <jackson.version>2.9.8</jackson.version>
         <jackson.type.version>2.9.7</jackson.type.version>
 
         <slf4j.version>1.7.26</slf4j.version>
         <log4j2.version>2.11.2</log4j2.version>
 
+        <spring.boot.version>2.1.3.RELEASE</spring.boot.version>
+        <spring.cloud.version>Greenwich.SR3</spring.cloud.version>
+        <testng.version>6.14.3</testng.version>
     </properties>
 
     <dependencyManagement>
@@ -50,44 +67,52 @@
             <dependency>
                 <groupId>org.qinarmy.foundation</groupId>
                 <artifactId>foundation-struct</artifactId>
-                <version>${project.version}</version>
+                <version>${foundation.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.qinarmy.foundation</groupId>
-                <artifactId>foundation-core</artifactId>
-                <version>${project.version}</version>
+                <artifactId>foundation-starter-core</artifactId>
+                <version>${foundation.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.qinarmy.foundation</groupId>
                 <artifactId>foundation-template-api</artifactId>
-                <version>${project.version}</version>
+                <version>${foundation.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.qinarmy.foundation</groupId>
                 <artifactId>foundation-template</artifactId>
-                <version>${project.version}</version>
+                <version>${foundation.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.qinarmy.foundation</groupId>
                 <artifactId>foundation-email-api</artifactId>
-                <version>${project.version}</version>
+                <version>${foundation.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.qinarmy.foundation</groupId>
                 <artifactId>foundation-email</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.qinarmy.army</groupId>
-                <artifactId>army-core</artifactId>
-                <version>${army.version}</version>
+                <version>${foundation.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.qinarmy.army</groupId>
-                <artifactId>army-struct</artifactId>
-                <version>${army.version}</version>
+                <groupId>org.qinarmy.foundation</groupId>
+                <artifactId>foundation-starter-jpa</artifactId>
+                <version>${foundation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.qinarmy.foundation</groupId>
+                <artifactId>foundation-starter-tx</artifactId>
+                <version>${foundation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.qinarmy.foundation</groupId>
+                <artifactId>foundation-starter-readonly-datasource</artifactId>
+                <version>${foundation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.qinarmy.foundation</groupId>
+                <artifactId>foundation-starter-datasource</artifactId>
+                <version>${foundation.version}</version>
             </dependency>
 
             <dependency>
@@ -99,6 +124,26 @@
                 <groupId>org.apache.pdfbox</groupId>
                 <artifactId>pdfbox-tools</artifactId>
                 <version>${pdfbox.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${alibaba.druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.ctrip.framework.apollo</groupId>
+                <artifactId>apollo-client</artifactId>
+                <version>${ctrip.apollo.version}</version>
             </dependency>
 
             <!--itext  jar-->
@@ -122,7 +167,23 @@
                 <artifactId>flying-saucer-pdf-itext5</artifactId>
                 <version>${org.xhtmlrenderer}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring.boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
