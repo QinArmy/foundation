@@ -1,7 +1,4 @@
-package org.qinarmy.foundation.tx;
-
-import org.qinarmy.foundation.core.ResultCode;
-import org.qinarmy.foundation.core.RuntimeBusinessException;
+package org.qinarmy.foundation.core;
 
 /**
  * created  on 2019-03-13.
@@ -9,6 +6,8 @@ import org.qinarmy.foundation.core.RuntimeBusinessException;
  */
 public class ArmyDataAccessException extends RuntimeBusinessException {
 
+
+    private static final long serialVersionUID = -2262308718840431553L;
 
     public ArmyDataAccessException(ResultCode resultCode) {
         super(resultCode);

@@ -137,7 +137,7 @@ public class CodeEnumUserType<T extends Enum<T> & CodeEnum> implements EnhancedU
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner)
             throws HibernateException, SQLException {
-        Assert.assertNotNull(codeEnumType, "type not config");
+        Assert.notNull(codeEnumType, "type not config");
         Map<Integer, T> codeMap = CodeEnumHelper.getMap(codeEnumType);
         if (codeMap == null) {
             throw new HibernateException(String.format("CodeEnum[%s] error", codeEnumType.getName()));
@@ -148,7 +148,7 @@ public class CodeEnumUserType<T extends Enum<T> & CodeEnum> implements EnhancedU
     @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session)
             throws HibernateException, SQLException {
-        Assert.assertNotNull(codeEnumType, "type not config");
+        Assert.notNull(codeEnumType, "type not config");
         if (value == null) {
             st.setNull(index, Types.INTEGER);
         } else {
@@ -183,7 +183,7 @@ public class CodeEnumUserType<T extends Enum<T> & CodeEnum> implements EnhancedU
 
     @Override
     public String objectToSQLString(Object value) {
-        Assert.assertNotNull(codeEnumType, "type not config");
+        Assert.notNull(codeEnumType, "type not config");
         return String.valueOf(((CodeEnum) value).code());
     }
 
@@ -194,7 +194,7 @@ public class CodeEnumUserType<T extends Enum<T> & CodeEnum> implements EnhancedU
 
     @Override
     public Object fromXMLString(String xmlValue) {
-        Assert.assertNotNull(codeEnumType, "type not config");
+        Assert.notNull(codeEnumType, "type not config");
         return Enum.valueOf(codeEnumType,xmlValue);
     }
 

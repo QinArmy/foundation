@@ -7,7 +7,7 @@ import org.hibernate.query.Query;
 import org.qinarmy.foundation.criteria.BaseCriteria;
 import org.qinarmy.foundation.orm.BaseDao;
 import org.qinarmy.foundation.orm.IDomain;
-import org.qinarmy.foundation.orm.NotUniqueException;
+import org.qinarmy.foundation.orm.NonUniqueException;
 import org.qinarmy.foundation.util.Assert;
 import org.qinarmy.foundation.util.Pair;
 import org.qinarmy.foundation.util.Triple;
@@ -170,8 +170,8 @@ public abstract class HibernateDaoSupport implements BaseDao, InitializingBean {
                                                         List<?> uniqueList) {
         Assert.notNull(entityClass, "entityClass is required.");
         Assert.notEmpty(propNames, "propNames not empty");
-        Assert.assertNotNull(propNames, "uniqueProp is required.");
-        Assert.assertEquals(propNames.size(), uniqueList.size(), "propNames.size not equals uniqueProp.length");
+        Assert.notNull(propNames, "uniqueProp is required.");
+        Assert.isTrue(propNames.size() == uniqueList.size(), "propNames.size not equals uniqueProp.length");
         return getTemplate().executeWithNativeSession(session -> {
 
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -222,7 +222,7 @@ public abstract class HibernateDaoSupport implements BaseDao, InitializingBean {
 
     @Override
     public <D extends IDomain> D getByUnique(Class<D> entityClass, String uniquePropName, Serializable uniqueProp)
-            throws NotUniqueException {
+            throws NonUniqueException {
         Assert.notNull(entityClass, "entityClass required");
         Assert.notNull(uniquePropName, "uniqueProp required");
         return getTemplate().executeWithNativeSession(session -> {
@@ -249,7 +249,7 @@ public abstract class HibernateDaoSupport implements BaseDao, InitializingBean {
             if (list.isEmpty()) {
                 d = null;
             } else if (list.size() > 1) {
-                throw new NotUniqueException("uniquePropName[%s] and uniqueProp[%s] query result size gt 1"
+                throw new NonUniqueException("uniquePropName[%s] and uniqueProp[%s] query result size gt 1"
                         , uniquePropName, uniqueProp);
             } else {
                 d = list.get(0);
@@ -260,11 +260,11 @@ public abstract class HibernateDaoSupport implements BaseDao, InitializingBean {
 
     @Override
     public <D extends IDomain> D getByUnique(Class<D> entityClass, List<String> propNames, List<?> uniqueList)
-            throws NotUniqueException {
+            throws NonUniqueException {
         Assert.notNull(entityClass, "entityClass is required.");
         Assert.notEmpty(propNames, "propNames not empty");
-        Assert.assertNotNull(uniqueList, "uniqueProp is required.");
-        Assert.assertEquals(propNames.size(), uniqueList.size(), "propNames.size not equals uniqueProp.length");
+        Assert.notNull(uniqueList, "uniqueProp is required.");
+        Assert.isTrue(propNames.size() == uniqueList.size(), "propNames.size not equals uniqueProp.length");
 
         return getTemplate().executeWithNativeSession(session -> {
 
@@ -289,7 +289,7 @@ public abstract class HibernateDaoSupport implements BaseDao, InitializingBean {
             List<D> resultList;
             resultList = query.getResultList();
             if (list.size() > 1) {
-                throw new NotUniqueException("proNames[%s],values[%s] no uqinue", propNames, uniqueList);
+                throw new NonUniqueException("proNames[%s],values[%s] no uqinue", propNames, uniqueList);
             }
             return resultList.isEmpty() ? null : resultList.get(0);
         });

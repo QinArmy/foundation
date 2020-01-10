@@ -58,4 +58,6 @@ public class PrimarySecondaryRoutingDataSource extends AbstractRoutingDataSource
     public void setTimeoutBoundary(int timeoutBoundary) {
         this.timeoutBoundary = timeoutBoundary;
     }
+
+
 }

@@ -1,5 +1,6 @@
 package org.qinarmy.foundation.tx;
 
+import org.qinarmy.foundation.core.ArmyDataAccessException;
 import org.qinarmy.foundation.core.ResultCode;
 
 /**

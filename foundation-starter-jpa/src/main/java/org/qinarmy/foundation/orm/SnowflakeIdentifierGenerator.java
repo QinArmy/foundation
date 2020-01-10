@@ -129,7 +129,7 @@ public class SnowflakeIdentifierGenerator implements IdentifierGenerator {
         return initor.updateAndGet(t -> {
             Snowflake s = t;
             if (s == null) {
-                s = new Snowflake(startTime, WORK_ID.get(), DATA_CENTER_ID.get());
+                s = Snowflake.createInstance(startTime, WORK_ID.get(), DATA_CENTER_ID.get());
             }
             return s;
         });

@@ -1,6 +1,7 @@
 package org.qinarmy.foundation.tx;
 
 
+import org.qinarmy.foundation.core.ArmyDataAccessException;
 import org.qinarmy.foundation.core.ResultCode;
 import org.qinarmy.foundation.core.RuntimeBusinessException;
 import org.springframework.lang.Nullable;

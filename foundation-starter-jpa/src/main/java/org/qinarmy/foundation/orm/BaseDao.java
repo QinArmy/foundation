@@ -23,10 +23,10 @@ public interface BaseDao {
     Long save(IDomain domain);
 
     <D extends IDomain> D getByUnique(Class<D> entityClass, String uniquePropName, Serializable uniqueProp)
-            throws NotUniqueException;
+            throws NonUniqueException;
 
     <D extends IDomain> D getByUnique(Class<D> entityClass, List<String> nameList, List<?> uniqueList)
-            throws NotUniqueException;
+            throws NonUniqueException;
 
     <D extends IDomain> List<D> find(Class<D> entityClass, final BaseCriteria criteria);
 
