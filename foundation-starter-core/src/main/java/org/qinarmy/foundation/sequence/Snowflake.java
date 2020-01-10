@@ -56,6 +56,7 @@ public class Snowflake {
 
     private static final ConcurrentMap<String,Boolean> START_TIME_MAP = new ConcurrentHashMap<>();
 
+    private static final ConcurrentMap<String, Snowflake> INSTANCE_MAP = new ConcurrentHashMap<>();
 
     /*##################### 属性值 ##########################*/
 
@@ -79,7 +80,7 @@ public class Snowflake {
      * @param workerId     工作ID (0~31)
      * @param dataCenterId 数据中心ID (0~31)
      */
-    public Snowflake(long startTime, long workerId, long dataCenterId) {
+    private Snowflake(long startTime, long workerId, long dataCenterId) {
 
         if (startTime < 0) {
             throw new IllegalArgumentException("startTime must great than or equals 0");
@@ -93,7 +94,7 @@ public class Snowflake {
             throw new IllegalArgumentException(
                     String.format("dataCenter Id can't be greater than %d or less than 0", MAX_DATA_CENTER_ID));
         }
-        String key = String.valueOf(startTime) + workerId + dataCenterId;
+        String key = getUniqueKey(startTime, workerId, dataCenterId);
 
         if(START_TIME_MAP.putIfAbsent(key,Boolean.TRUE) != null){
             throw new IllegalArgumentException(String.format("%s,%s,%s,duplicate",startTime,workerId,dataCenterId));
@@ -169,6 +170,16 @@ public class Snowflake {
         return timestamp;
     }
 
+    public synchronized static Snowflake createInstance(long startTime, long workerId, long dataCenterId) {
+        String key = getUniqueKey(startTime, workerId, dataCenterId);
+        Snowflake instance = INSTANCE_MAP.get(key);
+        if (instance == null) {
+            instance = new Snowflake(startTime, workerId, dataCenterId);
+            INSTANCE_MAP.putIfAbsent(key, instance);
+        }
+        return instance;
+    }
+
     public long getWorkerId() {
         return workerId;
     }
@@ -180,4 +191,9 @@ public class Snowflake {
     public long getStartTime() {
         return startTime;
     }
+
+    private static String getUniqueKey(long startTime, long workerId, long dataCenterId) {
+        return String.valueOf(startTime) + dataCenterId + workerId;
+    }
+
 }

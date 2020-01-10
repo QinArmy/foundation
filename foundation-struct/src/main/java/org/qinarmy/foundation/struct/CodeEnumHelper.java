@@ -40,15 +40,6 @@ public abstract class CodeEnumHelper {
                 )
                 );
             }
-
-            if (!Modifier.isStatic(f.getModifiers())
-                    && !Modifier.isPrivate(f.getModifiers())) {
-                throw new IllegalArgumentException(String.format("CodeEnum property[%s.%s] enum properties must private",
-                        clazz.getName(),
-                        f.getName())
-                );
-            }
-
         });
 
         if (!hasStaticCodeMap(clazz)) {

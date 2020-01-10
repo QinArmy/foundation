@@ -22,7 +22,7 @@ public class DataSourceAutoConfig implements EnvironmentAware {
     @Bean(value = ReadonlyDataSourceAutoConfig.PRIMARY, initMethod = "init", destroyMethod = "close")
     @RefreshScope
     public DruidDataSource corePrimaryDataSource() {
-        return ReadonlyDataSourceAutoConfig.createDataSource(
+        return DataSourceUtils.createDataSource(
                 env, ReadonlyDataSourceAutoConfig.CORE, DataSourceRole.PRIMARY);
     }
 

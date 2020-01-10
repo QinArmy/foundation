@@ -1,7 +1,6 @@
 package org.qinarmy.foundation.document;
 
 
-import org.qinarmy.foundation.data.ParamValidateException;
 import org.springframework.core.io.Resource;
 
 /**
@@ -14,7 +13,7 @@ public interface DocumentConverter {
     /**
      * 将 html 转换为 pdf
      */
-    Resource htmlToPdf(ConvertForm form) throws ParamValidateException, DocumentConvertException;
+    Resource htmlToPdf(ConvertForm form) throws DocumentConvertException;
 
 
 

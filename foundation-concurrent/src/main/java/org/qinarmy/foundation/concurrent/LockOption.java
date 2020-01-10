@@ -35,11 +35,11 @@ public class LockOption {
 
 
     public LockOption(String key, String holder) {
-        Assert.assertHasText(key, "key required");
-        Assert.assertHasText(holder, "holder required");
+        Assert.hasText(key, "key required");
+        Assert.hasText(holder, "holder required");
         this.key = key;
         this.holder = holder;
-        keyList = Collections.singletonList( this.key );
+        keyList = Collections.singletonList(this.key);
     }
 
     public LockOption(String key) {

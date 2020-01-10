@@ -49,8 +49,8 @@ public abstract class FileUtils {
     }
 
     public static void deleteFile(File file){
-        if(file.exists() && file.delete()){
-            LOG.debug("delete file:{}",file.getAbsolutePath());
+        if (file != null && file.exists() && file.delete()) {
+            LOG.debug("delete file:{}", file.getAbsolutePath());
         }
     }
 }

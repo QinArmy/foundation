@@ -27,7 +27,6 @@
         <module>foundation-starter-timer</module>
         <module>foundation-starter-web</module>
         <module>foundation-starter-tx</module>
-        <module>foundation-starter-timer</module>
         <module>foundation-starter-jpa</module>
         <module>foundation-starter-snowflake-client</module>
         <module>foundation-starter-snowflake-server</module>

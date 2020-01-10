@@ -11,6 +11,6 @@ public class ApplicationFailListener implements ApplicationListener<ApplicationF
 
     @Override
     public void onApplicationEvent(ApplicationFailedEvent event) {
-        LOG.error("应用启动失败,详情看以下异常信息:", event.getException());
+        LOG.error("application start up failure:", event.getException());
     }
 }

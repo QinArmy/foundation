@@ -1,6 +1,7 @@
 package org.qinarmy.foundation.core;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.qinarmy.foundation.util.TimeUtils;
 
 import java.time.LocalDateTime;
 
@@ -17,12 +18,13 @@ public final class Result {
     @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     private Object data;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Class<?> view;
 
     /**
      * 记录服务器时间,客户端可用于计算网络延迟
      */
-    @JsonFormat(pattern = "uuuu-MM-dd HH:mm:ss.SSS")
+    @JsonFormat(pattern = TimeUtils.FULL_DATE_TIME_FORMAT)
     private LocalDateTime serverTime;
 
 

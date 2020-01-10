@@ -35,7 +35,6 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-import static org.qinarmy.foundation.util.Assert.*;
 import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED;
 
 /**
@@ -403,10 +402,10 @@ public class EmailSenderImpl implements EmailSender, EnvironmentAware, Initializ
         Resource resource;
         String fileName;
         for (EmailForm.Attachment attachment : attachmentList) {
-            assertHasText(attachment.getFileName(), "file name required");
-            assertTrue(attachment.getFileName().length() <= 20, "附件名已超过20个字符.");
-            assertHasText(attachment.getResource(), "resource pattern required");
-            assertNotNull(attachment.getMediaType(), "MediaType required");
+            Assert.hasText(attachment.getFileName(), "file name required");
+            Assert.isTrue(attachment.getFileName().length() <= 20, "附件名已超过20个字符.");
+            Assert.hasText(attachment.getResource(), "resource pattern required");
+            Assert.notNull(attachment.getMediaType(), "MediaType required");
 
             resource = loadResource(attachment.getResource());
             fileName = MimeUtility.encodeText(attachment.getFileName(), StandardCharsets.UTF_8.name(), "B");
@@ -445,9 +444,9 @@ public class EmailSenderImpl implements EmailSender, EnvironmentAware, Initializ
 
         Resource resource;
         for (TemplateEmailForm.Inline inline : inlineList) {
-            assertHasText(inline.getContentId(), "contentId  required");
-            assertHasText(inline.getResource(), "resource pattern required");
-            assertNotNull(inline.getMediaType(), "MediaType required");
+            Assert.notNull(inline.getContentId(), "contentId  required");
+            Assert.hasText(inline.getResource(), "resource pattern required");
+            Assert.notNull(inline.getMediaType(), "MediaType required");
 
 
             resource = loadResource(inline.getResource());
@@ -532,7 +531,7 @@ public class EmailSenderImpl implements EmailSender, EnvironmentAware, Initializ
     private void assertCommon(EmailForm form) {
 
         boolean error = StringUtils.hasText(form.getPrefix()) && !form.getPrefix().endsWith(".email");
-        assertFalse(error, "prefix must end with .email");
+        Assert.isTrue(!error, "prefix must end with .email");
 
     }
 
@@ -543,8 +542,8 @@ public class EmailSenderImpl implements EmailSender, EnvironmentAware, Initializ
     private void assertTemplateEmailForm(TemplateEmailForm form) {
 
         assertCommon(form);
-        assertHasText(form.getTemplatePattern(), "templatePattern required");
-        assertNotNull(form.getVariables(), "variables required");
+        Assert.hasText(form.getTemplatePattern(), "templatePattern required");
+        Assert.notNull(form.getVariables(), "variables required");
     }
 
 

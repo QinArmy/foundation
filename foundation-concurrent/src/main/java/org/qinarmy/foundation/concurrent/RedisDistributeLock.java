@@ -41,7 +41,7 @@ public class RedisDistributeLock implements DistributeLock, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.assertNotNull(template, "template required");
+        Assert.notNull(template, "template required");
     }
 
     /**

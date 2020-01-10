@@ -39,6 +39,7 @@ public abstract class KeyUtils {
         if (type == KeyType.AES) {
             key = (Key) (spec);
         }
+        assert key != null;
         return key;
     }
 

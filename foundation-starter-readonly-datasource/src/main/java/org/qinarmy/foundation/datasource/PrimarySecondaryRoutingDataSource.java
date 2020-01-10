@@ -18,11 +18,11 @@ public class PrimarySecondaryRoutingDataSource extends AbstractRoutingDataSource
 
     private static final Logger LOG = LoggerFactory.getLogger(PrimarySecondaryRoutingDataSource.class);
 
-    public static final String PRIMARY = "primary";
+    public static final String PRIMARY = DataSourceRole.PRIMARY.toString();
 
-    public static final String SECONDARY = "secondary";
+    public static final String SECONDARY = DataSourceRole.SECONDARY.toString();
 
-    public static final String TIMEOUT_SECONDARY = "timeout";
+    public static final String TIMEOUT_SECONDARY = DataSourceRole.TIMEOUT.toString();
 
     /**
      * 当事务超时时间大于等于此值时使用超时从库
@@ -47,7 +47,7 @@ public class PrimarySecondaryRoutingDataSource extends AbstractRoutingDataSource
         } else {
             lookupKey = PRIMARY;
         }
-        LOG.debug("datasource : {},thread :{}", lookupKey, Thread.currentThread().getName());
+        LOG.debug("datasource : {},thread :{}", lookupKey, TransactionDefinitionHolder.getName());
         return lookupKey;
     }
 

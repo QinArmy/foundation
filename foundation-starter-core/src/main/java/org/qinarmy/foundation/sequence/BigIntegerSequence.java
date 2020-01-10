@@ -1,10 +1,11 @@
 package org.qinarmy.foundation.sequence;
 
+import org.qinarmy.foundation.util.Assert;
+
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Arrays;
 
-import static org.qinarmy.foundation.util.Assert.assertGeZero;
 import static org.qinarmy.foundation.util.TimeUtils.CLOSE_DATE_FORMATTER;
 
 
@@ -31,7 +32,7 @@ public class BigIntegerSequence {
      * @param suffixNumber 大于等于 0
      */
     public String nextAsString(long suffixNumber) {
-        assertGeZero(suffixNumber, "后缀数字不能是负数");
+        Assert.isTrue(suffixNumber >= 0L, "后缀数字不能是负数");
 
         String prefix = LocalDate.now().format(CLOSE_DATE_FORMATTER);
         String sequence = String.valueOf(snowflake.next());

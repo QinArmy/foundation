@@ -11,6 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.interceptor.TransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionAttributeSource;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -35,8 +36,8 @@ public class TransactionDefinitionInterceptor implements MethodInterceptor, Init
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        transactionAttributeSource = applicationContext.getBean( TransactionAttributeSource.class );
-        Assert.assertNotNull(transactionAttributeSource, "config error");
+        transactionAttributeSource = applicationContext.getBean(TransactionAttributeSource.class);
+        Assert.notNull(transactionAttributeSource, "config error");
     }
 
     @Override
@@ -45,12 +46,12 @@ public class TransactionDefinitionInterceptor implements MethodInterceptor, Init
 
         if (targetClass != null && !TransactionSynchronizationManager.isActualTransactionActive()) {
             LOG.debug( "外层事务:开始{},{}", invocation.getMethod(), targetClass );
-            TransactionDefinition definition = transactionAttributeSource.getTransactionAttribute(
-                    invocation.getMethod(), targetClass );
+            TransactionAttribute definition = transactionAttributeSource.getTransactionAttribute(
+                    invocation.getMethod(), targetClass);
 
             if (definition != null && definition.getPropagationBehavior()
                     != TransactionDefinition.PROPAGATION_NEVER) {
-                TransactionDefinitionHolder.set(definition);
+                TransactionDefinitionHolder.set(definition, invocation.getMethod());
             }
         } else {
             LOG.debug( "内层事务:开始{},{}", invocation.getMethod(), targetClass );

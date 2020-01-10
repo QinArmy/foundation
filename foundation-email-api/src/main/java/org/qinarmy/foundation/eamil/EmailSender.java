@@ -1,8 +1,6 @@
 package org.qinarmy.foundation.eamil;
 
 
-import org.qinarmy.foundation.data.ParamValidateException;
-
 /**
  * 邮件发送器
  * created  on 2018/10/18.
@@ -16,15 +14,13 @@ public interface EmailSender {
      * 若发送附件且出错时(附件未找到,网络问题), 则会抛出异常
      * </p>
      */
-    void send(EmailForm form) throws ParamValidateException;
+    void send(EmailForm form);
 
     /**
      * 在这个方法 {@link TemplateEmailForm#getText()} 会被忽略
      * 发送指定模块的邮件
-     *
-     *
      */
-    void sendTemplate(TemplateEmailForm form) throws ParamValidateException, EmailException;
+    void sendTemplate(TemplateEmailForm form) throws EmailException;
 
 
 }

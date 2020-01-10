@@ -1,13 +1,6 @@
 package org.qinarmy.foundation.util;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import org.qinarmy.foundation.core.ResultCode;
-import org.qinarmy.foundation.tx.ArmyDataAccessException;
-import org.qinarmy.foundation.tx.OptimisticLockingException;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -71,15 +64,5 @@ public abstract class ExceptionUtils {
         return msg;
     }
 
-    public static ArmyDataAccessException convert(@NonNull DataAccessException de, @Nullable String message) {
-        ArmyDataAccessException e;
-        String msg = message == null ? de.getMessage() : message;
-        if (de instanceof OptimisticLockingFailureException) {
-            e = new OptimisticLockingException(msg , de);
-        } else {
-            e = new ArmyDataAccessException(ResultCode.DATA_ACCESS,msg, de);
-        }
-        return e;
-    }
 
 }

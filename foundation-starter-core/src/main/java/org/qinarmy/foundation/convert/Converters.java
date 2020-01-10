@@ -1,7 +1,7 @@
 package org.qinarmy.foundation.convert;
 
-import org.qinarmy.foundation.data.ParamValidateException;
 import org.qinarmy.foundation.util.ArrayUtils;
+import org.qinarmy.foundation.util.Assert;
 import org.qinarmy.foundation.util.StringUtils;
 import org.qinarmy.foundation.util.TimeUtils;
 import org.springframework.core.convert.converter.Converter;
@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.qinarmy.foundation.util.ArrayUtils.*;
-import static org.qinarmy.foundation.util.Assert.assertNotNull;
 
 
 /**
@@ -187,9 +186,9 @@ public abstract class Converters {
             LocalTime[] times = sourceArray.length == 0 ? EMPTY_TIME : new LocalTime[sourceArray.length];
             try {
                 for (int i = 0; i < times.length; i++) {
-                    times[i] = StringToLocalTime.INSTANCE.convert( sourceArray[i] );
+                    times[i] = StringToLocalTime.INSTANCE.convert(sourceArray[i]);
                 }
-            } catch (ParamValidateException e) {
+            } catch (IllegalArgumentException e) {
                 times = EMPTY_TIME;
             }
             return times;
@@ -210,10 +209,10 @@ public abstract class Converters {
 
             try {
                 for (int i = 0; i < dates.length; i++) {
-                    dates[i] = StringToLocalDate.INSTANCE.convert( sourceArray[i] );
-                    assertNotNull( dates[i], "" );
+                    dates[i] = StringToLocalDate.INSTANCE.convert(sourceArray[i]);
+                    Assert.notNull(dates[i], "");
                 }
-            } catch (ParamValidateException e) {
+            } catch (IllegalArgumentException e) {
                 dates = EMPTY_DATE;
             }
 
@@ -236,10 +235,10 @@ public abstract class Converters {
 
             try {
                 for (int i = 0; i < dates.length; i++) {
-                    dates[i] = StringToYearMonth.INSTANCE.convert( sourceArray[i] );
-                    assertNotNull( dates[i], "" );
+                    dates[i] = StringToYearMonth.INSTANCE.convert(sourceArray[i]);
+                    Assert.notNull(dates[i], "");
                 }
-            } catch (ParamValidateException e) {
+            } catch (IllegalArgumentException e) {
                 dates = EMPTY_YEAR_MONTH;
             }
 
@@ -261,10 +260,10 @@ public abstract class Converters {
 
             try {
                 for (int i = 0; i < dates.length; i++) {
-                    dates[i] = StringToMonthDay.INSTANCE.convert( sourceArray[i] );
-                    assertNotNull( dates[i], "" );
+                    dates[i] = StringToMonthDay.INSTANCE.convert(sourceArray[i]);
+                    Assert.notNull(dates[i], "");
                 }
-            } catch (ParamValidateException e) {
+            } catch (IllegalArgumentException e) {
                 dates = EMPTY_MONTH_DAY;
             }
 
@@ -288,10 +287,10 @@ public abstract class Converters {
 
             try {
                 for (int i = 0; i < dateTimes.length; i++) {
-                    dateTimes[i] = StringToLocalDatetime.INSTANCE.convert( sourceArray[i] );
-                    assertNotNull( dateTimes[i], "" );
+                    dateTimes[i] = StringToLocalDatetime.INSTANCE.convert(sourceArray[i]);
+                    Assert.notNull(dateTimes[i], "");
                 }
-            } catch (ParamValidateException e) {
+            } catch (IllegalArgumentException e) {
                 dateTimes = EMPTY_DATE_TIME;
             }
 
@@ -314,10 +313,10 @@ public abstract class Converters {
 
             try {
                 for (int i = 0; i < dateTimes.length; i++) {
-                    dateTimes[i] = StringToZonedDatetime.INSTANCE.convert( sourceArray[i] );
-                    assertNotNull( dateTimes[i], "" );
+                    dateTimes[i] = StringToZonedDatetime.INSTANCE.convert(sourceArray[i]);
+                    Assert.notNull(dateTimes[i], "");
                 }
-            } catch (ParamValidateException e) {
+            } catch (IllegalArgumentException e) {
                 dateTimes = EMPTY_ZONE_DATE_TIME;
             }
 
