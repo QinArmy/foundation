@@ -73,7 +73,9 @@ public abstract class TransactionDefinitionHolder {
     static void pop() {
         TxDefinitionHolder current = HOLDER.get();
         if (current != null) {
-            if (current.suspended != null) {
+            if (current.suspended == null) {
+                HOLDER.remove();
+            } else {
                 HOLDER.set(current.suspended);
             }
         } else {

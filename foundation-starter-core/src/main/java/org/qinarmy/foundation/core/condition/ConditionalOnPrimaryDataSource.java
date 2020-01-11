@@ -16,7 +16,7 @@ import java.lang.annotation.*;
  * 因为是查看 bean 是否存在 ,所以通常与 {@link AutoConfigureBefore} 或 {@link AutoConfigureAfter} 联用.
  * </p>
  * <p>
- * 为保证此注解能正常工作,相应的路由数据源的 Bean 定义方法的返回值必须是 {@link AbstractRoutingDataSource} 或 其子类.
+ * 为保证此注解能正常工作,相应的路由数据源的 Bean 定义方法的返回值必须是 {@link AbstractRoutingDataSource} 子类.
  * </p>
  */
 @Retention(RetentionPolicy.RUNTIME)

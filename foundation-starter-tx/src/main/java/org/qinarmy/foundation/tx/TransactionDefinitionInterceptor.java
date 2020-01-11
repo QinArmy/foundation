@@ -115,6 +115,7 @@ public class TransactionDefinitionInterceptor implements MethodInterceptor, Init
                 LOG.debug("事务抛出异常:{},{}", e != null, invocation.getMethod());
                 break;
             default:
+                throw new IllegalArgumentException(String.format("unknown DefType[%s]", defType));
         }
     }
 
@@ -128,22 +129,22 @@ public class TransactionDefinitionInterceptor implements MethodInterceptor, Init
             case TransactionDefinition.PROPAGATION_SUPPORTS:
             case TransactionDefinition.PROPAGATION_MANDATORY:
             case TransactionDefinition.PROPAGATION_NESTED:
-                LOG.debug("内部事务开始 - {}", invocation.getMethod());
+                LOG.debug("内部事务开始: {}", invocation.getMethod());
                 defType = DefType.INNER;
                 break;
             case TransactionDefinition.PROPAGATION_REQUIRES_NEW:
                 TransactionDefinitionHolder.push(definition, invocation.getMethod());
                 defType = DefType.OUTER;
-                LOG.debug("新外部事务开始 - {}", invocation.getMethod());
+                LOG.debug("新外部事务开始: {}", invocation.getMethod());
                 break;
             case TransactionDefinition.PROPAGATION_NOT_SUPPORTED:
                 TransactionDefinitionHolder.push(definition, invocation.getMethod());
                 defType = DefType.NOT_SUPPORTED;
-                LOG.debug("事务将被挡挂起 - {}", TransactionDefinitionHolder.getName());
+                LOG.debug("事务将被挡挂起: {}", TransactionDefinitionHolder.getName());
                 break;
             case TransactionDefinition.PROPAGATION_NEVER:
                 defType = DefType.ERROR;
-                LOG.debug("事务将抛出异常 - {}", TransactionDefinitionHolder.getName());
+                LOG.debug("事务将抛出异常: {}", TransactionDefinitionHolder.getName());
                 break;
             default:
                 throw new IllegalArgumentException(
