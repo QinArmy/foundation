@@ -172,11 +172,11 @@ public class TransactionDefinitionInterceptor implements MethodInterceptor, Init
             case TransactionDefinition.PROPAGATION_SUPPORTS:
             case TransactionDefinition.PROPAGATION_NEVER:
                 defType = DefType.NONE;
-                LOG.debug("无事务执行 - {}", invocation.getMethod());
+                LOG.debug("无事务执行: {}", invocation.getMethod());
                 break;
             case TransactionDefinition.PROPAGATION_MANDATORY:
                 defType = DefType.ERROR;
-                LOG.debug("事务将抛出异常 - {}", TransactionDefinitionHolder.getName());
+                LOG.debug("事务将抛出异常: {}", TransactionDefinitionHolder.getName());
                 break;
             default:
                 throw new IllegalArgumentException(

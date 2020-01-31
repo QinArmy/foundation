@@ -14,10 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.EnvironmentAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Description;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.lang.Nullable;
 
@@ -55,32 +52,33 @@ public class ReadonlyDataSourceAutoConfig implements EnvironmentAware, Applicati
     }
 
     @Bean(value = SECONDARY, initMethod = "init", destroyMethod = "close")
-    @RefreshScope
+    //@RefreshScope
     public DruidDataSource coreSecondaryDataSource() {
         return DataSourceUtils.createDataSource(env, CORE, DataSourceRole.SECONDARY);
     }
 
     @Bean(value = TIMEOUT_SECONDARY, initMethod = "init", destroyMethod = "close")
     @Description("也是从库,只是查询的超时时间特别长")
-    @RefreshScope
+    //@RefreshScope
     public DruidDataSource coreTimeoutSecondaryDataSource() {
         return DataSourceUtils.createDataSource(env, CORE, DataSourceRole.TIMEOUT);
     }
 
     @Bean
     @DependsOn({SECONDARY, TIMEOUT_SECONDARY})
+    @Primary
     public PrimarySecondaryRoutingDataSource coreRoutingDataSource(@Qualifier(SECONDARY) DruidDataSource secondary,
                                                                    @Qualifier(TIMEOUT_SECONDARY) DruidDataSource timeoutSecondary) {
-
         PrimarySecondaryRoutingDataSource dataSource = new PrimarySecondaryRoutingDataSource();
 
         dataSource.setDefaultTargetDataSource(secondary);
 
         Map<String, Object> dataSourceMap = new HashMap<>(6);
-        DruidDataSource primaryDataSource = applicationContext.getBean(DruidDataSource.class, PRIMARY);
-        if (primaryDataSource != null) {
-            dataSourceMap.put(PrimarySecondaryRoutingDataSource.PRIMARY, primaryDataSource);
+        if (applicationContext.containsBean(PRIMARY)) {
+            dataSourceMap.put(PrimarySecondaryRoutingDataSource.PRIMARY,
+                    applicationContext.getBean(DruidDataSource.class, PRIMARY));
         }
+
         dataSourceMap.put(PrimarySecondaryRoutingDataSource.SECONDARY, secondary);
         dataSourceMap.put(PrimarySecondaryRoutingDataSource.TIMEOUT_SECONDARY, timeoutSecondary);
 

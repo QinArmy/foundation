@@ -10,6 +10,16 @@
       "name": "spring.datasource.core.primary.url",
       "description": "core 主库url",
       "type": "java.lang.String"
+    },
+    {
+      "name": "spring.datasource.core.secondary.url",
+      "description": "core 从库url",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "spring.datasource.core.timeout.url",
+      "description": "core 超时从库url",
+      "type": "java.lang.String"
     }
   ]
 }

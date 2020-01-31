@@ -45,15 +45,15 @@ public class EmailSenderImpl implements EmailSender, EnvironmentAware, Initializ
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailSenderImpl.class);
 
-    private static final String OFF = "tasty.email.off";
+    private static final String OFF = "foundation.email.off";
 
-    private static final String SYNC = "tasty.email.sync";
+    private static final String SYNC = "foundation.email.sync";
 
-    private static final String SIGNATURE = "tasty.email.signature";
+    private static final String SIGNATURE = "foundation.email.signature";
 
-    private static final String SUBJECT = "tasty.email.subject";
+    private static final String SUBJECT = "foundation.email.subject";
 
-    private static final String META_FILE_NAME = "tasty.email.meta.fileName";
+    private static final String META_FILE_NAME = "foundation.email.meta.fileName";
 
     private static final String DEFAULT_SUBJECT = "信使报信,%s";
 

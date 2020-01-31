@@ -47,7 +47,10 @@ public class PrimarySecondaryRoutingDataSource extends AbstractRoutingDataSource
         } else {
             lookupKey = PRIMARY;
         }
-        LOG.debug("datasource : {},thread :{}", lookupKey, TransactionDefinitionHolder.getName());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("routing datasource:{},thread:{},method:{}",
+                    lookupKey, Thread.currentThread().getName(), TransactionDefinitionHolder.getName());
+        }
         return lookupKey;
     }
 

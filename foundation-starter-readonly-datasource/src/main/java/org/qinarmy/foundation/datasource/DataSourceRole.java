@@ -4,7 +4,7 @@ public enum DataSourceRole {
 
     PRIMARY("primary"),
     SECONDARY("secondary"),
-    TIMEOUT("timout");
+    TIMEOUT("timeout");
 
     private final String display;
 
