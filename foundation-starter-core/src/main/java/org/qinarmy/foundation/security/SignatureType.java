@@ -21,7 +21,7 @@ public enum SignatureType implements CodeEnum {
 
     SHA224withRSA(50, ""),
 
-    SHA256withRSA(60, ""),
+    SHA256withRSA(60, "SHA256withRSA"),
 
     SHA384withRSA(70, ""),
 
@@ -29,7 +29,7 @@ public enum SignatureType implements CodeEnum {
 
     NONEwithDSA(90, ""),
 
-    SHA1withDSA(100, ""),
+    SHA1withDSA(100, "SHA1withDSA"),
 
     SHA224withDSA(110, ""),
 

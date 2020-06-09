@@ -4,18 +4,14 @@ import org.springframework.lang.NonNull;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.regex.Pattern;
-
-import static org.qinarmy.foundation.core.ResultCode.KEY_ERROR;
 
 /**
  * created  on 2019-03-13.
@@ -34,65 +30,81 @@ public abstract class KeyUtils {
 
     @NonNull
     public static Key readKey(@NonNull KeyType type, @NonNull String base64Text) throws SecurityKeyException {
-        KeySpec spec = getKeySpec(type, getEncoded(base64Text));
+        KeySpec spec = createKeySpec(type, getEncoded(base64Text));
         Key key = null;
-        if (type == KeyType.AES) {
+        if (spec instanceof SecretKeySpec) {
             key = (Key) (spec);
         }
-        assert key != null;
+        if (key == null) {
+            throw new SecurityKeyException("not support KeyType[%s]", type);
+        }
+
         return key;
     }
 
     public static PrivateKey readPrivateKey(KeyPairType type, String base64Text) throws SecurityKeyException {
         try {
-            KeyFactory keyFactory = KeyFactory.getInstance(type.display());
+            KeyFactory keyFactory = KeyFactory.getInstance(type.algorithm());
             return keyFactory.generatePrivate(
-                    getKeySpec(type, true, getEncoded(base64Text))
+                    createKeySpec(type, true, getEncoded(base64Text))
             );
-        } catch (Exception e) {
-            throw new SecurityKeyException(KEY_ERROR, e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new SecurityKeyException(e, "algorithm[%s] is supported by current JDK", type.algorithm());
+        } catch (InvalidKeySpecException e) {
+            throw new SecurityKeyException(e, "key spec error");
         }
     }
 
+    /**
+     * @param base64Text see {@link Base64#getMimeEncoder()}
+     */
     public static PublicKey readPublicKey(KeyPairType type, String base64Text) throws SecurityKeyException {
         try {
-            KeyFactory keyFactory = KeyFactory.getInstance(type.display());
+            KeyFactory keyFactory = KeyFactory.getInstance(type.algorithm());
             return keyFactory.generatePublic(
-                    getKeySpec(type, false, getEncoded(base64Text))
+                    createKeySpec(type, false, getEncoded(base64Text))
             );
-        } catch (Exception e) {
-            throw new SecurityKeyException(KEY_ERROR, e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new SecurityKeyException(e, "algorithm[%s] is supported by current JDK", type.algorithm());
+        } catch (InvalidKeySpecException e) {
+            throw new SecurityKeyException(e, "key spec error");
         }
     }
 
     public static Key createKey(KeyType type, int keySize) throws SecurityKeyException {
         try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance(type.display());
-            keyGenerator.init(keySize);
+            KeyGenerator keyGenerator = KeyGenerator.getInstance(type.algorithm());
+            keyGenerator.init(keySize, new SecureRandom());
             return keyGenerator.generateKey();
-        } catch (Exception e) {
-            throw new SecurityKeyException(KEY_ERROR, e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new SecurityKeyException(e, "algorithm[%s] is supported by current JDK", type.algorithm());
+        } catch (InvalidParameterException e) {
+            throw new SecurityKeyException(e, "keySize error.%s", e.getMessage());
         }
     }
 
     public static KeyPair createKeyPair(KeyPairType type, int keySize) throws SecurityKeyException {
         try {
-            KeyPairGenerator generator = KeyPairGenerator.getInstance(type.display());
-            generator.initialize(keySize);
+            KeyPairGenerator generator = KeyPairGenerator.getInstance(type.algorithm());
+            generator.initialize(keySize, new SecureRandom());
             return generator.generateKeyPair();
-        } catch (Exception e) {
-            throw new SecurityKeyException(KEY_ERROR, e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new SecurityKeyException(e, "algorithm[%s] is supported by current JDK", type.algorithm());
+        } catch (InvalidParameterException e) {
+            throw new SecurityKeyException(e, "keySize error.%s", e.getMessage());
         }
     }
 
-    public static void writeTo(File file, Key key) throws SecurityKeyException {
+    public static void writeTo(File file, Key key) throws IOException {
+        write(new FileWriter(file), key);
+    }
 
-        try (FileWriter w = new FileWriter(file); BufferedWriter writer = new BufferedWriter(w)) {
+    public static void write(Writer w, Key key) throws IOException {
+
+        try (BufferedWriter writer = new BufferedWriter(w)) {
 
             doWriteToFile(writer, key);
 
-        } catch (IOException e) {
-            throw new SecurityKeyException(KEY_ERROR, e.getMessage());
         }
     }
 
@@ -103,28 +115,22 @@ public abstract class KeyUtils {
 
     /*##################### protected ########################*/
 
-    protected static KeySpec getKeySpec(@NonNull KeyType type, byte[] encoded) {
-        KeySpec spec;
-
-        switch (type) {
-            case AES:
-                spec = new SecretKeySpec(encoded, type.display());
-                break;
-            default:
-                throw new IllegalArgumentException(String.format("KeyAlgorithm[%s] unknown", type));
-        }
-        return spec;
+    protected static KeySpec createKeySpec(@NonNull KeyType type, byte[] encoded) {
+        return new SecretKeySpec(encoded, type.algorithm());
     }
 
-    protected static KeySpec getKeySpec(@NonNull KeyPairType type, boolean privateKey, byte[] encoded) {
+    protected static KeySpec createKeySpec(@NonNull KeyPairType type, boolean privateKey, byte[] encoded) {
         KeySpec spec;
 
         switch (type) {
             case RSA:
+            case DH:
+            case EC:
+            case DSA:
                 spec = privateKey ? new PKCS8EncodedKeySpec(encoded) : new X509EncodedKeySpec(encoded);
                 break;
             default:
-                throw new IllegalArgumentException(String.format("KeyAlgorithm[%s] unknown", type));
+                throw new IllegalArgumentException(String.format("KeyPairType[%s] unknown", type));
         }
         return spec;
     }
@@ -169,11 +175,11 @@ public abstract class KeyUtils {
     private static String getTypeDesc(Key key) {
         String typeDesc;
         if (key instanceof PrivateKey) {
-            typeDesc = "PRIVATE";
+            typeDesc = key.getAlgorithm() + " PRIVATE";
         } else if (key instanceof PublicKey) {
-            typeDesc = "PUBLIC";
+            typeDesc = key.getAlgorithm() + " PUBLIC";
         } else {
-            typeDesc = "";
+            typeDesc = key.getAlgorithm();
         }
         return typeDesc;
     }

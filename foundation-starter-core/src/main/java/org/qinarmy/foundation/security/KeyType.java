@@ -1,55 +1,41 @@
 package org.qinarmy.foundation.security;
 
 
-import org.qinarmy.foundation.struct.CodeEnum;
-import org.qinarmy.foundation.util.ArrayUtils;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
 /**
- * created  on 2019-03-13.
  * @see KeyUtils
+ * @see SignatureUtils
+ * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#KeyGenerator">KeyGenerator Algorithms</a>
  */
-public enum KeyType implements CodeEnum {
+public enum KeyType {
 
-    AES(100, "AES", ArrayUtils.asSet(128) )
+    /**
+     *
+     */
+    AES("AES"),
+    ARCFOUR("ARCFOUR"),
+    BLOWFISH("Blowfish"),
+    DES("DES"),
 
-   ;
+    DE_SEDE("DESede"),
+    HMAC_MD5("HmacMD5"),
+    HMAC_SHA1("HmacSHA1"),
+    HMAC_SHA224("HmacSHA224"),
+
+    HMAC_SHA256("HmacSHA256"),
+    HMAC_SHA384("HmacSHA384"),
+    HMAC_SHA512("HmacSHA512"),
+    RC2("RC2");
 
 
-    private final int code;
-
-    private final String display;
-
-    public final Collection<Integer> keySizes;
-
-    private static final Map<Integer, KeyType> CODE_MAP = CodeEnum.getCodeMap(KeyType.class);
+    private final String algorithm;
 
 
-    @Nullable
-    public static KeyType resolve(int code) {
-        return CODE_MAP.get(code);
+    KeyType(String algorithm) {
+        this.algorithm = algorithm;
     }
 
-    KeyType(int code, @NonNull String display, @NonNull Collection<Integer> keySizes) {
-        this.code = code;
-        this.display = display;
-        this.keySizes = Collections.unmodifiableCollection(keySizes);
-    }
-
-    @Override
-    public int code() {
-        return code;
-    }
-
-    @NonNull
-    @Override
-    public String display() {
-        return display;
+    public String algorithm() {
+        return algorithm;
     }
 
 }

@@ -1,51 +1,46 @@
 package org.qinarmy.foundation.security;
 
 
-import org.qinarmy.foundation.struct.CodeEnum;
-import org.qinarmy.foundation.util.ArrayUtils;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-
 /**
- * created  on 2019-03-13.
+ * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#KeyPairGenerator">KeyPairGenerator Algorithms</a>
  */
-public enum KeyPairType implements CodeEnum {
+public enum KeyPairType {
 
-    RSA(200, "RSA", ArrayUtils.asSet(1024, 2048, 4096));
+    /**
+     * Generates keypairs for the RSA algorithm (Signature/Cipher).
+     */
+    RSA("RSA"),
+
+    /**
+     * Generates keypairs for the Diffie-Hellman KeyAgreement algorithm.
+     * Note: key.getAlgorithm() will return "DH" instead of "DiffieHellman".
+     */
+    DH("DiffieHellman"),
+
+    /**
+     * Generates keypairs for the Digital Signature Algorithm.
+     */
+    DSA("DSA"),
+
+//    /**
+//     * Generates keypairs for the RSASSA-PSS signature algorithm.
+//     */
+    // RSASSA_PSS("RSASSA-PSS"),
+
+    /**
+     * Generates keypairs for the Elliptic Curve algorithm.
+     */
+    EC("EC");
 
 
-    private final int code;
-
-    private final String display;
-
-    public final Collection<Integer> keySizes;
-
-    private static final Map<Integer, KeyType> CODE_MAP = CodeEnum.getCodeMap(KeyType.class);
+    private final String algorithm;
 
 
-    @Nullable
-    public static KeyType resolve(int code) {
-        return CODE_MAP.get(code);
+    KeyPairType(String algorithm) {
+        this.algorithm = algorithm;
     }
 
-    KeyPairType(int code, @NonNull String display, @NonNull Collection<Integer> keySizes) {
-        this.code = code;
-        this.display = display;
-        this.keySizes = Collections.unmodifiableCollection(keySizes);
-    }
-
-    @Override
-    public int code() {
-        return code;
-    }
-
-    @NonNull
-    @Override
-    public String display() {
-        return display;
+    public String algorithm() {
+        return this.algorithm;
     }
 }
